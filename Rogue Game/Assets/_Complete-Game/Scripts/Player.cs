@@ -10,7 +10,7 @@ namespace Completed
 	{
         public bool canRestart;
 
-		public float restartLevelDelay = 2f;		//Delay time in seconds to restart level.
+		public float restartLevelDelay = 0.5f;		//Delay time in seconds to restart level.
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
 		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
@@ -180,13 +180,13 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Exit.
 			if(other.tag == "Exit")
 			{
-                ImageFade.FadeOut();
+                ImageFade.FadeOut(restartLevelDelay);
 
-                //Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
+               // Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
                 Invoke ("Restart", restartLevelDelay);
 				
 				//Disable the player object since level is over.
-				enabled = false;
+			    enabled = false;
 			}
 			
 			//Check if the tag of the trigger collided with is Food.
