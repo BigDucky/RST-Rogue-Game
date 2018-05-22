@@ -8,7 +8,7 @@ public class ImageFade : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         levelImage = this.gameObject.GetComponent<Image>();
-        FadeIn();
+        FadeIn(0.5f);
 	}
 	
 	// Update is called once per frame
@@ -16,12 +16,13 @@ public class ImageFade : MonoBehaviour {
 		
 	}
 
-    public static void FadeIn() {
-        levelImage.CrossFadeAlpha(0, 5, false);
+    public static void FadeIn(float time) {
+        levelImage.CrossFadeAlpha(0, time, false);
     }
 
-    public static void FadeOut() {
+    public static void FadeOut(float time) {
         levelImage.gameObject.SetActive(true);
-        levelImage.CrossFadeAlpha(255, 2, false);
+        levelImage.CrossFadeAlpha(0f, 0f, true); // needed to 
+        levelImage.CrossFadeAlpha(1, time, true);
     }
 }

@@ -13,8 +13,9 @@ namespace Completed
 		
 		private Animator animator;							//Variable of type Animator to store a reference to the enemy's Animator component.
 		private Transform target;							//Transform to attempt to move toward each turn.
-		private bool skipMove;								//Boolean to determine whether or not enemy should skip a turn or move this turn.
-		
+		private bool skipMove;                              //Boolean to determine whether or not enemy should skip a turn or move this turn.
+
+        public CameraShake cameraShake;
 		
 		//Start overrides the virtual Start function of the base class.
 		protected override void Start ()
@@ -84,7 +85,8 @@ namespace Completed
 		{
 			//Declare hitPlayer and set it to equal the encountered component.
 			Player hitPlayer = component as Player;
-			
+
+            StartCoroutine(CameraShake.Shake(0.5f,0.5f));           
 			//Call the LoseFood function of hitPlayer passing it playerDamage, the amount of foodpoints to be subtracted.
 			hitPlayer.LoseFood (playerDamage);
 			
