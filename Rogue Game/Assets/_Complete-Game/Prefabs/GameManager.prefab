@@ -41,6 +41,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d59e4dfb9c9404b9471de0c983feac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 133658}
   levelStartDelay: 2
   turnDelay: 0.1
   playerFoodPoints: 100
@@ -56,6 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff182172d726402b9e9eacdb89c9724, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  size: 8
   columns: 8
   rows: 8
   wallCount:
@@ -93,7 +95,6 @@ MonoBehaviour:
   - {fileID: 110520, guid: 7094f72151ec74f569c4e03f1ec0f8e7, type: 2}
   - {fileID: 110520, guid: b0ace21a29149403094422fb3bd96aa9, type: 2}
   - {fileID: 110520, guid: e85c94355cc4641da919bd5d0ac956d4, type: 2}
-  hurtImage: {fileID: 1597288014499400, guid: 68e5f15d979381c4e82c358d274aaa4f, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

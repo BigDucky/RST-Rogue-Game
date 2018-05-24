@@ -24,10 +24,12 @@ namespace Completed
 				maximum = max;
 			}
 		}
-		
-		
-		public int columns = 8; 										//Number of columns in our game board.
-		public int rows = 8;											//Number of rows in our game board.
+
+        public int size = 8;
+        [HideInInspector]
+        public int columns;                                             //Number of columns in our game board.
+        [HideInInspector]
+		public int rows;											    //Number of rows in our game board.
 		public Count wallCount = new Count (5, 9);						//Lower and upper limit for our random number of walls per level.
 		public Count foodCount = new Count (1, 5);						//Lower and upper limit for our random number of food items per level.
 		public GameObject exit;											//Prefab to spawn for exit.
@@ -46,7 +48,9 @@ namespace Completed
 		{
 			//Clear our list gridPositions.
 			gridPositions.Clear ();
-			
+
+            columns = size;
+            rows = size;
 			//Loop through x axis (columns).
 			for(int x = 1; x < columns-1; x++)
 			{

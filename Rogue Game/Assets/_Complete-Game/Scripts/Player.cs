@@ -9,6 +9,7 @@ namespace Completed
 	public class Player : MovingObject
 	{
         public bool canRestart;
+        public SpriteRenderer m_spriteRenderer;
 
 		public float restartLevelDelay = 0.5f;		//Delay time in seconds to restart level.
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
@@ -33,11 +34,14 @@ namespace Completed
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
+            // Get the sprite renderer of the player
+            m_spriteRenderer = GetComponent<SpriteRenderer>();
+
 			//Get a component reference to the Player's animator component
 			animator = GetComponent<Animator>();
 			
 			//Get the current food point total stored in GameManager.instance between levels.
-			food = GameManager.instance.playerFoodPoints;
+			food = GameManager.instance.playerFoodPoints;   
 			
 			//Set the foodText to reflect the current player food total.
 			foodText.text = "Food: " + food;
@@ -68,7 +72,16 @@ namespace Completed
 			
 			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
 			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
-			
+
+            if(horizontal == -1)
+            {
+                m_spriteRenderer.flipX = true;
+            }
+
+            if (horizontal == 1)
+            {
+                m_spriteRenderer.flipX = false;
+            }
 			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
 			vertical = (int) (Input.GetAxisRaw ("Vertical"));
 			
@@ -226,9 +239,11 @@ namespace Completed
 		//Restart reloads the scene when called.
 		private void Restart ()
 		{
+            Debug.Log("Restart");
+
             //Load the last scene loaded, in this case Main, the only scene in the game. And we load it in "Single" mode so it replace the existing one
             //and not load all the scene object in the current scene.
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+            SceneManager.LoadScene("_Complete-Game", LoadSceneMode.Single);
          
 		}
 		

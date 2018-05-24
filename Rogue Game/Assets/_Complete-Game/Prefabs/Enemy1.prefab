@@ -95,6 +95,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &11495068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -111,8 +112,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   playerDamage: 10
-  attackSound1: {fileID: 8300000, guid: 0db8cac2749584a009540aa5671ee80d, type: 3}
-  attackSound2: {fileID: 8300000, guid: 114514a3b3697484ebaa08f7fbf842d3, type: 3}
+  attackSound1: {fileID: 8300000, guid: c896764b80211af4694976af61225cc1, type: 3}
+  attackSound2: {fileID: 8300000, guid: 82a0bb599904f3d489c3114d3c8ba6eb, type: 3}
+  cameraShake: {fileID: 0}
 --- !u!212 &21295068
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -126,6 +128,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

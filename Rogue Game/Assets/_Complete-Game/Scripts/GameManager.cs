@@ -9,7 +9,8 @@ namespace Completed
 	
 	public class GameManager : MonoBehaviour
 	{
-		public float levelStartDelay = 2f;						//Time to wait before starting level, in seconds.
+        public GameObject gameManager;
+        public float levelStartDelay = 0.5f;						//Time to wait before starting level, in seconds.
 		public float turnDelay = 0.1f;							//Delay between each Player turn.
 		public int playerFoodPoints = 100;						//Starting value for Player food points.
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
@@ -23,8 +24,6 @@ namespace Completed
 		private List<Enemy> enemies;							//List of all Enemy units, used to issue them move commands.
 		private bool enemiesMoving;								//Boolean to check if enemies are moving.
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
-		
-		
 		
 		//Awake is always called before any Start functions
 		void Awake()
@@ -74,8 +73,12 @@ namespace Completed
 		//Initializes the game for each level.
 		void InitGame()
 		{
-			//While doingSetup is true the player can't move, prevent player from moving while title card is up.
-			doingSetup = true;
+            Debug.Log(level);
+           // gameManager = GameObject.Find("Manager(Clone)");
+           // Debug.Log(gameManager);
+
+        //While doingSetup is true the player can't move, prevent player from moving while title card is up.
+        doingSetup = true;
 			
 			//Get a reference to our image LevelImage by finding it by name.
 			levelImage = GameObject.Find("LevelImage");
@@ -94,10 +97,9 @@ namespace Completed
 			
 			//Clear any Enemy objects in our List to prepare for next level.
 			enemies.Clear();
-			
+            Debug.Log("initializing board manager");
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
 			boardScript.SetupScene(level);
-			
 		}
 		
 		
