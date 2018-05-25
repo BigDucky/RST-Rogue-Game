@@ -27,9 +27,10 @@ namespace Completed
 		public AudioClip gameOverSound;             //Audio clip to play when player dies.
 
 
-        int diamondCount;
-        int ironCount;
-        int goldCount;
+        int diamondCount; // diamond variable
+        int ironCount; // iron variable
+        int goldCount;  // gold variable
+
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -49,13 +50,14 @@ namespace Completed
 			//Get the current food point total stored in GameManager.instance between levels.
 			food = GameManager.instance.playerFoodPoints;
 
+            //Get the current iron/gold/diamond point total stored in GameManager.instance between levels.
             ironCount = GameManager.instance.ironPoints;
             goldCount = GameManager.instance.goldPoints;
             diamondCount = GameManager.instance.diamondPoints;
 
             //Set the foodText to reflect the current player food total.
             foodText.text = "Food:    " + food;
-
+            //Set the inventoryTexts to reflect the current player pickup total.
             inventoryText[0].text = "x" + "\n" + "\n" + diamondCount;
             inventoryText[2].text = "x" + "\n" + "\n" + goldCount;
             inventoryText[1].text = "x" + "\n" + "\n" + ironCount;
@@ -68,7 +70,7 @@ namespace Completed
 		//This function is called when the behaviour becomes disabled or inactive.
 		private void OnDisable ()
 		{
-			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
+			//When Player object is disabled, store the current local toatls in the GameManager so it can be re-loaded in next level.
 			GameManager.instance.playerFoodPoints = food;
             GameManager.instance.ironPoints = ironCount;
             GameManager.instance.goldPoints = goldCount;
@@ -90,12 +92,12 @@ namespace Completed
 			
 			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
 			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
-
+            // if the player is facing left, flip the sprite
             if(horizontal == -1)
             {
                 m_spriteRenderer.flipX = true;
             }
-
+            // if the player faces right again, flip the sprite again
             if (horizontal == 1)
             {
                 m_spriteRenderer.flipX = false;
@@ -254,22 +256,24 @@ namespace Completed
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
 			}
-
+            // Check if the player is colliding with an ore
             else if (other.tag == "Ores") {
                 switch (other.name) {
-
+                    // add a diamond ore, and disable the gameobject
                     case "Diamond(Clone)":
                         GameManager.instance.diamondPoints++;
                         diamondCount++;
                         inventoryText[0].text = "x" + "\n" + "\n" + diamondCount;
                         other.gameObject.SetActive(false);
                         break;
+                    // add a gold ore, and disable the gameobject
                     case "Gold(Clone)":
                         GameManager.instance.goldPoints++;
                         goldCount++;
                         inventoryText[2].text = "x" + "\n" + "\n" + goldCount;
                         other.gameObject.SetActive(false);
                         break;
+                    // add a iron ore, and disable the gameobject
                     case "Iron(Clone)":
                         GameManager.instance.ironPoints++;
                         ironCount++;
@@ -281,8 +285,7 @@ namespace Completed
                 }
             }
 		}
-		
-		
+
 		//Restart reloads the scene when called.
 		private void Restart ()
 		{

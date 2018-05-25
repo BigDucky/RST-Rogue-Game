@@ -9,12 +9,11 @@ namespace Completed
 	
 	public class GameManager : MonoBehaviour
 	{
-        public GameObject gameManager;
         public float levelStartDelay = 0.5f;						//Time to wait before starting level, in seconds.
 		public float turnDelay = 0.1f;                          //Delay between each Player turn.
-        public int goldPoints = 0;
-        public int ironPoints = 0;
-        public int diamondPoints = 0;
+        public int goldPoints = 0;                              // variable for the gold ingots, and set it to 0;
+        public int ironPoints = 0;                              // variable for the iron ingots, and set it to 0;
+        public int diamondPoints = 0;                           // variable for the diamonds, and set it to 0;
         public int playerFoodPoints = 100;						//Starting value for Player food points.
 		public static GameManager instance = null;				//Static instance of GameManager which allows it to be accessed by any other script.
         public GameObject startMenu;
@@ -77,10 +76,6 @@ namespace Completed
 		//Initializes the game for each level.
 		void InitGame()
 		{
-            Debug.Log(level);
-           // gameManager = GameObject.Find("Manager(Clone)");
-           // Debug.Log(gameManager);
-
         //While doingSetup is true the player can't move, prevent player from moving while title card is up.
         doingSetup = true;
 			
@@ -101,11 +96,9 @@ namespace Completed
 			
 			//Clear any Enemy objects in our List to prepare for next level.
 			enemies.Clear();
-            Debug.Log("initializing board manager");
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
 			boardScript.SetupScene(level);
 		}
-		
 		
 		//Hides black image used between levels
 		void HideLevelImage()
@@ -186,4 +179,3 @@ namespace Completed
 		}
 	}
 }
-
