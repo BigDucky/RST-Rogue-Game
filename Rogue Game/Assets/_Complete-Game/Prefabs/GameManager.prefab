@@ -45,7 +45,9 @@ MonoBehaviour:
   levelStartDelay: 2
   turnDelay: 0.1
   playerFoodPoints: 100
+  startMenu: {fileID: 0}
   playersTurn: 1
+  level: 1
 --- !u!114 &11433658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,6 +97,10 @@ MonoBehaviour:
   - {fileID: 110520, guid: 7094f72151ec74f569c4e03f1ec0f8e7, type: 2}
   - {fileID: 110520, guid: b0ace21a29149403094422fb3bd96aa9, type: 2}
   - {fileID: 110520, guid: e85c94355cc4641da919bd5d0ac956d4, type: 2}
+  itemsInventory:
+  - {fileID: 1401408658944334, guid: df3613a8b33ddf04c9ce415440f521a7, type: 2}
+  - {fileID: 1229755373477436, guid: ba594483252eb5349bc94013035e9ae1, type: 2}
+  - {fileID: 1937616998759896, guid: 0e6b0ed02995ca240a07f351e36092ba, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
