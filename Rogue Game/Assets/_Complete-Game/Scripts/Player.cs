@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;	//Allows us to use UI.
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace Completed
 {
@@ -15,15 +16,20 @@ namespace Completed
 		public int pointsPerFood = 10;				//Number of points to add to player food points when picking up a food object.
 		public int pointsPerSoda = 20;				//Number of points to add to player food points when picking up a soda object.
 		public int wallDamage = 1;					//How much damage a player does to a wall when chopping it.
-		public Text foodText;						//UI Text to display current player food total.
+		public Text foodText;                       //UI Text to display current player food total.
+        public List<Text> inventoryText;
 		public AudioClip moveSound1;				//1 of 2 Audio clips to play when player moves.
 		public AudioClip moveSound2;				//2 of 2 Audio clips to play when player moves.
 		public AudioClip eatSound1;					//1 of 2 Audio clips to play when player collects a food object.
 		public AudioClip eatSound2;					//2 of 2 Audio clips to play when player collects a food object.
 		public AudioClip drinkSound1;				//1 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
-		public AudioClip gameOverSound;				//Audio clip to play when player dies.
-		
+		public AudioClip gameOverSound;             //Audio clip to play when player dies.
+
+
+        int diamondCount;
+        int ironCount;
+        int goldCount;
 		private Animator animator;					//Used to store a reference to the Player's animator component.
 		private int food;                           //Used to store player food points total during level.
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
@@ -41,13 +47,21 @@ namespace Completed
 			animator = GetComponent<Animator>();
 			
 			//Get the current food point total stored in GameManager.instance between levels.
-			food = GameManager.instance.playerFoodPoints;   
-			
-			//Set the foodText to reflect the current player food total.
-			foodText.text = "Food: " + food;
-			
-			//Call the Start function of the MovingObject base class.
-			base.Start ();
+			food = GameManager.instance.playerFoodPoints;
+
+            ironCount = GameManager.instance.ironPoints;
+            goldCount = GameManager.instance.goldPoints;
+            diamondCount = GameManager.instance.diamondPoints;
+
+            //Set the foodText to reflect the current player food total.
+            foodText.text = "Food:    " + food;
+
+            inventoryText[0].text = "x" + "\n" + "\n" + diamondCount;
+            inventoryText[2].text = "x" + "\n" + "\n" + goldCount;
+            inventoryText[1].text = "x" + "\n" + "\n" + ironCount;
+
+            //Call the Start function of the MovingObject base class.
+            base.Start ();
 		}
 		
 		
@@ -56,11 +70,15 @@ namespace Completed
 		{
 			//When Player object is disabled, store the current local food total in the GameManager so it can be re-loaded in next level.
 			GameManager.instance.playerFoodPoints = food;
-		}
+            GameManager.instance.ironPoints = ironCount;
+            GameManager.instance.goldPoints = goldCount;
+            GameManager.instance.diamondPoints = diamondCount;
+        }
 		
 		
 		private void Update ()
 		{
+            ValueSetter.currentValue = food;
 			//If it's not the player's turn, exit the function.
 			if(!GameManager.instance.playersTurn) return;
 			
@@ -149,7 +167,7 @@ namespace Completed
 			food--;
 			
 			//Update food text display to reflect current score.
-			foodText.text = "Food: " + food;
+			foodText.text = "Food:    " + food;
 			
 			//Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
 			base.AttemptMove <T> (xDir, yDir);
@@ -207,9 +225,11 @@ namespace Completed
 			{
 				//Add pointsPerFood to the players current food total.
 				food += pointsPerFood;
+
+                ValueSetter.maximum += pointsPerFood;
 				
 				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerFood + " Food: " + food;
+				foodText.text = " Food:   " +  food;
 				
 				//Call the RandomizeSfx function of SoundManager and pass in two eating sounds to choose between to play the eating sound effect.
 				SoundManager.instance.RandomizeSfx (eatSound1, eatSound2);
@@ -223,9 +243,10 @@ namespace Completed
 			{
 				//Add pointsPerSoda to players food points total
 				food += pointsPerSoda;
-				
-				//Update foodText to represent current total and notify player that they gained points
-				foodText.text = "+" + pointsPerSoda + " Food: " + food;
+                ValueSetter.maximum += pointsPerSoda;
+
+                //Update foodText to represent current total and notify player that they gained points
+                foodText.text = " Food:   " +food;
 				
 				//Call the RandomizeSfx function of SoundManager and pass in two drinking sounds to choose between to play the drinking sound effect.
 				SoundManager.instance.RandomizeSfx (drinkSound1, drinkSound2);
@@ -233,6 +254,32 @@ namespace Completed
 				//Disable the soda object the player collided with.
 				other.gameObject.SetActive (false);
 			}
+
+            else if (other.tag == "Ores") {
+                switch (other.name) {
+
+                    case "Diamond(Clone)":
+                        GameManager.instance.diamondPoints++;
+                        diamondCount++;
+                        inventoryText[0].text = "x" + "\n" + "\n" + diamondCount;
+                        other.gameObject.SetActive(false);
+                        break;
+                    case "Gold(Clone)":
+                        GameManager.instance.goldPoints++;
+                        goldCount++;
+                        inventoryText[2].text = "x" + "\n" + "\n" + goldCount;
+                        other.gameObject.SetActive(false);
+                        break;
+                    case "Iron(Clone)":
+                        GameManager.instance.ironPoints++;
+                        ironCount++;
+                        inventoryText[1].text = "x" + "\n" + "\n" + ironCount;
+                        other.gameObject.SetActive(false);
+                        break;
+                    default:
+                        break;
+                }
+            }
 		}
 		
 		
@@ -257,9 +304,8 @@ namespace Completed
 			
 			//Subtract lost food points from the players total.
 			food -= loss;
-			
-			//Update the food display with the new total.
-			foodText.text = "-"+ loss + " Food: " + food;
+            //Update the food display with the new total.
+            foodText.text =" Food:   " + food;
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();

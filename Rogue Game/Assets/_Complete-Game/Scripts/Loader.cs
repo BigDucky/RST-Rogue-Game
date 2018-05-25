@@ -10,6 +10,7 @@ namespace Completed
         public GameObject game;                 // game itself
         public GameObject startScreen;          // start screen
         public GameObject player;
+        public GameObject mainCamera;
         static bool isInGame = false;           // boolean to check if the player is in game or not.
 
         public void onClick()
@@ -30,6 +31,7 @@ namespace Completed
 
         public void startGame()
         {
+            mainCamera.SetActive(false);
             player.SetActive(true);
             game.SetActive(true);
             startScreen.SetActive(false);
