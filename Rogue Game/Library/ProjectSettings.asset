@@ -705,13 +705,13 @@ PlayerSettings:
     Game_Performance: 0
     Hub: 0
     Purchasing: 0
-    UNet: 0
+    UNet: 1
     Unity_Ads: 0
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
-  cloudProjectId: 
-  projectName: 2D Roguelike
-  organizationId: 
+  cloudProjectId: 546012e6-48a9-44f3-8378-29b6c45e2c23
+  projectName: Rogue Game
+  organizationId: grooteeend
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;	//Allows us to use UI.
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 namespace Completed
 {
@@ -26,6 +27,7 @@ namespace Completed
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip gameOverSound;             //Audio clip to play when player dies.
 
+        public static GameObject tracker;
 
         int diamondCount; // diamond variable
         int ironCount; // iron variable
@@ -41,6 +43,8 @@ namespace Completed
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
+            tracker = GameObject.Find("Tracker");
+
             // Get the sprite renderer of the player
             m_spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -213,6 +217,7 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Exit.
 			if(other.tag == "Exit")
 			{
+                Analytics.CustomEvent("Cleared Level",new Dictionary<string, object> { {"FoodLeft",food } });
                 ImageFade.FadeOut(restartLevelDelay);
 
                // Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
@@ -225,6 +230,7 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Food.
 			else if(other.tag == "Food")
 			{
+                Analytics.CustomEvent("Food Picked Up");
 				//Add pointsPerFood to the players current food total.
 				food += pointsPerFood;
 
@@ -243,8 +249,9 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Soda.
 			else if(other.tag == "Soda")
 			{
-				//Add pointsPerSoda to players food points total
-				food += pointsPerSoda;
+                Analytics.CustomEvent("Food Picked Up");
+                //Add pointsPerSoda to players food points total
+                food += pointsPerSoda;
                 ValueSetter.maximum += pointsPerSoda;
 
                 //Update foodText to represent current total and notify player that they gained points
@@ -312,6 +319,7 @@ namespace Completed
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();
+
 		}
 		
 		
