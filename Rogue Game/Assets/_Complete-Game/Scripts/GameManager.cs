@@ -9,6 +9,7 @@ namespace Completed
 	
 	public class GameManager : MonoBehaviour
 	{
+        public float time;
         public float levelStartDelay = 0.5f;						//Time to wait before starting level, in seconds.
 		public float turnDelay = 0.1f;                          //Delay between each Player turn.
         public int goldPoints = 0;                              // variable for the gold ingots, and set it to 0;

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;	//Allows us to use UI.
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using UnityEngine.Analytics;
 
 namespace Completed
 {
@@ -26,6 +27,7 @@ namespace Completed
 		public AudioClip drinkSound2;				//2 of 2 Audio clips to play when player collects a soda object.
 		public AudioClip gameOverSound;             //Audio clip to play when player dies.
 
+        public static GameObject tracker;
 
         int diamondCount; // diamond variable
         int ironCount; // iron variable
@@ -41,6 +43,8 @@ namespace Completed
 		//Start overrides the Start function of MovingObject
 		protected override void Start ()
 		{
+            tracker = GameObject.Find("Tracker");
+
             // Get the sprite renderer of the player
             m_spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -80,6 +84,8 @@ namespace Completed
 		
 		private void Update ()
 		{
+            Timer();
+
             ValueSetter.currentValue = food;
 			//If it's not the player's turn, exit the function.
 			if(!GameManager.instance.playersTurn) return;
@@ -201,11 +207,16 @@ namespace Completed
 			
 			//Call the DamageWall function of the Wall we are hitting.
 			hitWall.DamageWall (wallDamage);
+            TrackerManager.DamagedWall();
 			
 			//Set the attack trigger of the player's animation controller in order to play the player's attack animation.
 			animator.SetTrigger ("playerChop");
 		}
-		
+
+        public void Timer() {
+            Debug.Log(GameManager.instance.time);
+            GameManager.instance.time += Time.deltaTime;
+        }
 		
 		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
 		private void OnTriggerEnter2D (Collider2D other)
@@ -213,8 +224,8 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Exit.
 			if(other.tag == "Exit")
 			{
+                TrackerManager.ClearedLevel(GameManager.instance.level,"Food ", food, "Time", GameManager.instance.time);
                 ImageFade.FadeOut(restartLevelDelay);
-
                // Invoke the Restart function to start the next level with a delay of restartLevelDelay (default 1 second).
                 Invoke ("Restart", restartLevelDelay);
 				
@@ -225,6 +236,7 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Food.
 			else if(other.tag == "Food")
 			{
+                Analytics.CustomEvent("Food Picked Up");
 				//Add pointsPerFood to the players current food total.
 				food += pointsPerFood;
 
@@ -243,8 +255,10 @@ namespace Completed
 			//Check if the tag of the trigger collided with is Soda.
 			else if(other.tag == "Soda")
 			{
-				//Add pointsPerSoda to players food points total
-				food += pointsPerSoda;
+                Analytics.CustomEvent("Food Picked Up");
+                Analytics.CustomEvent("Soda Picked Up");
+                //Add pointsPerSoda to players food points total
+                food += pointsPerSoda;
                 ValueSetter.maximum += pointsPerSoda;
 
                 //Update foodText to represent current total and notify player that they gained points
@@ -261,6 +275,7 @@ namespace Completed
                 switch (other.name) {
                     // add a diamond ore, and disable the gameobject
                     case "Diamond(Clone)":
+                        TrackerManager.ItemPickUp(other.name);
                         GameManager.instance.diamondPoints++;
                         diamondCount++;
                         inventoryText[0].text = "x" + "\n" + "\n" + diamondCount;
@@ -268,6 +283,7 @@ namespace Completed
                         break;
                     // add a gold ore, and disable the gameobject
                     case "Gold(Clone)":
+                        TrackerManager.ItemPickUp(other.name);
                         GameManager.instance.goldPoints++;
                         goldCount++;
                         inventoryText[2].text = "x" + "\n" + "\n" + goldCount;
@@ -275,6 +291,7 @@ namespace Completed
                         break;
                     // add a iron ore, and disable the gameobject
                     case "Iron(Clone)":
+                        TrackerManager.ItemPickUp(other.name);
                         GameManager.instance.ironPoints++;
                         ironCount++;
                         inventoryText[1].text = "x" + "\n" + "\n" + ironCount;
@@ -300,8 +317,9 @@ namespace Completed
 		
 		//LoseFood is called when an enemy attacks the player.
 		//It takes a parameter loss which specifies how many points to lose.
-		public void LoseFood (int loss)
-		{
+		public void LoseFood (int loss)		
+        {
+            TrackerManager.GotHit();
 			//Set the trigger for the player animator to transition to the playerHit animation.
 			animator.SetTrigger ("playerHit");
 			
@@ -312,6 +330,7 @@ namespace Completed
 			
 			//Check to see if game has ended.
 			CheckIfGameOver ();
+
 		}
 		
 		
@@ -321,6 +340,7 @@ namespace Completed
 			//Check if food point total is less than or equal to zero.
 			if (food <= 0) 
 			{
+                TrackerManager.PlayerDied(GameManager.instance.level);
 				//Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
 				SoundManager.instance.PlaySingle (gameOverSound);
 				
