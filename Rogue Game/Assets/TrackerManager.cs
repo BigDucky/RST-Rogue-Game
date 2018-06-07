@@ -19,7 +19,9 @@ public class TrackerManager : MonoBehaviour {
 
     }
 
-    public static void ClearedLevel(int level, string item, int amount, string timeString, int time) {
+    public static void ClearedLevel(int level, string item, int amount, string timeString, float time) {
+
+        time = Mathf.Round(time * 100f) / 100f;
 
         Analytics.CustomEvent("Cleared level " + level + "with ", new Dictionary<string, object> { { item, amount }, {timeString, time } });
 

@@ -214,7 +214,8 @@ namespace Completed
 		}
 
         public void Timer() {
-            GameManager.instance.time = Mathf.RoundToInt( GameManager.instance.time + Time.deltaTime);
+            Debug.Log(GameManager.instance.time);
+            GameManager.instance.time += Time.deltaTime;
         }
 		
 		//OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
